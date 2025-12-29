@@ -1,0 +1,52 @@
+<div>
+    <p>Add a new Player</p>
+    <div id="player-form-container">
+        <form id="player-form" class="flex-row">
+            <div class="flex-col">
+                <label for="player-name">Name<span style="color: red">*</span></label>
+                <input id="player-name" name="name" type="text" maxlength=64 placeholder="John Doe" required>
+            </div>
+            <div class="flex-col">
+                <label for="player-steam-id">Steam ID</label>
+                <input id="player-steam-id" name="steam_id" type="text" maxlength=20 placeholder="STEAM_0:1:127052393">
+            </div>
+            <div class="flex-col">
+                <label for="player-country">Country<span style="color: red">*</span></label>
+                <select id="player-country" name="code" required></select>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="player-form-response"></div>
+    </div>
+</div>
+
+<div>
+    <div class="flex-row-aligned" style="justify-content: space-between">
+        <h1>Top Players</h1>
+        <div class="flex-row">
+            <button style="font-size: 18px; padding: 6px 16px" onclick="window.location.href='/players?type=overall'">Overall</button>
+            <button class="flex-row-aligned" style="font-size: 18px; padding: 6px 16px; gap: 8px" onclick="window.location.href='/players?type=soldier'"><p>Soldier</p><img class="icon" src="/soldier.svg"></button>
+            <button class="flex-row-aligned" style="font-size: 18px; padding: 6px 16px; gap: 8px" onclick="window.location.href='/players?type=demoman'"><p>Demoman</p><img class="icon" src="/demoman.svg"></button>
+        </div>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th th:text="|${#strings.capitalize(type)} Rank|"></th>
+            <th th:text="|${#strings.capitalize(type)} Points|"></th>
+            <th>Player</th>
+        </tr>
+        </thead>
+        <tbody id="players-table">
+            <tr th:each="p : ${leaderboard}">
+                <td th:class="|num _${p.rank}|" th:text="${p.rank}"></td>
+                <td class="num" th:text="${#numbers.formatDecimal(p.points, 1, 2)}"></td>
+                <td><a th:href="|/players/${p.player_id}|" th:text="|[${p.rank_title}] ${p.name}|"></a></td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" style="width: 100%; line-height: 24px" th:data-type="${type}" th:onclick="|load_more_players(event, this)|" th:data-offset="100">Load More</button>
+</div>
+
+<script src="/js/players.js"></script>
+

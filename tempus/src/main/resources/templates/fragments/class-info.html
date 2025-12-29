@@ -1,0 +1,5 @@
+<div th:fragment="this(class, info)" class="flex-row-aligned">
+    <img class="icon" th:src="|/${class}.svg|">
+    <p th:text="|T${info.tier}|"></p>
+    <p th:text="|R${info.rating}|"></p>
+</div>

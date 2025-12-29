@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div th:replace="~{fragments/title-bar.html}"></div>
+
+    <div id="content" class="flex-row">
+        <div th:replace="${side_bar != null} ? ~{${side_bar}} : ~{}"></div>
+        <div id="main" th:insert="~{${main}}"></div>
+    </div>
+
+    <script src="/js/main.js" defer></script>
+</body>
+</html>

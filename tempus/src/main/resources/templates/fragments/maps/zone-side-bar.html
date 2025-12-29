@@ -1,0 +1,11 @@
+<div th:fragment="this" id="side-bar" class="flex-col" style="gap: 8px">
+    <a th:href="|/maps/${map.id}/map/1|">Map</a>
+    <div th:if="${course_count} > 0" class="flex-col">
+        <p>Courses:</p>
+        <a th:each="i : ${#numbers.sequence(1, course_count)}" th:text="|Course ${i}|" th:href="|/maps/${map.id}/course/${i}|"></a>
+    </div>
+    <div th:if="${bonus_count} > 0" class="flex-col">
+        <p>Bonuses:</p>
+        <a th:each="i : ${#numbers.sequence(1, bonus_count)}" th:text="|Bonus ${i}|" th:href="|/maps/${map.id}/bonus/${i}|"></a>
+    </div>
+</div>

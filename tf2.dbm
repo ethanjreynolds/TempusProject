@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.2.2" use-changelog="false" max-obj-count="15"
+	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
+	 last-position="-182,-14" last-zoom="0.7" scene-rect="-260,-20,1825.83,1442.92"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="tempus" is-template="false" allow-conns="true">
+</database>
+
+<schema name="public" layers="0" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+</schema>
+
+<table name="zone_info" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="280" y="400"/>
+	<column name="map_id" not-null="true">
+		<type name="int2" length="128"/>
+	</column>
+	<column name="zone_type" not-null="true">
+		<type name="varchar" length="6"/>
+		<comment> <![CDATA[map, course, bonus]]> </comment>
+	</column>
+	<column name="zone_index" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="soldier_tier" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="soldier_rating" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="soldier_run_count" default-value="0">
+		<type name="int4" length="0"/>
+	</column>
+	<column name="demoman_tier" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="demoman_rating" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="demoman_run_count" default-value="0">
+		<type name="int4" length="0"/>
+	</column>
+	<constraint name="map_id_pk" type="pk-constr" table="public.zone_info">
+		<columns names="map_id,zone_type,zone_index" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="zone_run" layers="0" collapse-mode="2" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="780" y="200"/>
+	<column name="map_id" not-null="true">
+		<type name="int2" length="128"/>
+	</column>
+	<column name="zone_type" not-null="true">
+		<type name="varchar" length="6"/>
+		<comment> <![CDATA[map, course, bonus]]> </comment>
+	</column>
+	<column name="zone_index" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="player_id" not-null="true">
+		<type name="int8" length="0"/>
+	</column>
+	<column name="class" not-null="true">
+		<type name="varchar" length="7"/>
+	</column>
+	<column name="server_id" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="time_submitted" not-null="true">
+		<type name="timestamp" length="0"/>
+		<comment> <![CDATA[when the run is submitted]]> </comment>
+	</column>
+	<column name="duration" not-null="true">
+		<type name="float8" length="0"/>
+	</column>
+	<column name="rank">
+		<type name="int8" length="0"/>
+		<comment> <![CDATA[should only be updated by trigger]]> </comment>
+	</column>
+	<constraint name="zone_run_classes" type="ck-constr" table="public.zone_run">
+			<expression> <![CDATA[class = 'soldier' OR class = 'demoman']]> </expression>
+	</constraint>
+	<constraint name="zone_run_pk" type="pk-constr" table="public.zone_run">
+		<columns names="map_id,zone_type,zone_index,player_id,class" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="player_info" layers="0" collapse-mode="2" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="800" y="740"/>
+	<column name="player_id" not-null="true">
+		<type name="int8" length="0"/>
+		<comment> <![CDATA[tempus id]]> </comment>
+	</column>
+	<column name="steam_id">
+		<type name="varchar" length="20"/>
+		<comment> <![CDATA[ex: STEAM_0:0:43167835]]> </comment>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="first_seen">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="last_seen">
+		<type name="timestamp" length="0"/>
+	</column>
+	<column name="country_code">
+		<type name="char" length="2"/>
+	</column>
+	<constraint name="player_pk" type="pk-constr" table="public.player_info">
+		<columns names="player_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="steam_id_uni" type="uq-constr" table="public.player_info">
+		<columns names="steam_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="map_author" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="500" y="1240"/>
+	<column name="map_id" not-null="true">
+		<type name="int2" length="128"/>
+	</column>
+	<column name="author_id" not-null="true">
+		<type name="int8" length="0"/>
+		<comment> <![CDATA[The creator of the map]]> </comment>
+	</column>
+	<constraint name="map_author_pk" type="pk-constr" table="public.map_author">
+		<columns names="map_id,author_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="zone_rating" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="-220" y="680"/>
+	<column name="rating" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="zone_type" not-null="true">
+		<type name="varchar" length="6"/>
+	</column>
+	<column name="points" not-null="true">
+		<type name="float4" length="0"/>
+	</column>
+	<constraint name="rating_pk" type="pk-constr" table="public.zone_rating">
+		<columns names="rating,zone_type" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="rating_range" type="ck-constr" table="public.zone_rating">
+			<expression> <![CDATA[rating >= 1 AND rating <= 4]]> </expression>
+	</constraint>
+</table>
+
+<table name="zone_tier" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="-220" y="380"/>
+	<column name="tier" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="zone_type" not-null="true">
+		<type name="varchar" length="6"/>
+	</column>
+	<column name="points" not-null="true">
+		<type name="float4" length="0"/>
+	</column>
+	<constraint name="map_tier_pk" type="pk-constr" table="public.zone_tier">
+		<columns names="tier,zone_type" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="server" layers="0" collapse-mode="2" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1300" y="360"/>
+	<column name="server_id" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="server_name">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="server_index" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="country_code" not-null="true">
+		<type name="char" length="2"/>
+	</column>
+	<constraint name="server_pk" type="pk-constr" table="public.server">
+		<columns names="server_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="country" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1280" y="740"/>
+	<column name="country_code" not-null="true">
+		<type name="char" length="2"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="128"/>
+	</column>
+	<constraint name="country_pk" type="pk-constr" table="public.country">
+		<columns names="country_code" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tier_name" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="-240" y="140"/>
+	<column name="tier" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="name">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="map_tier_name_pk" type="pk-constr" table="public.tier_name">
+		<columns names="tier" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="tier_range" type="ck-constr" table="public.tier_name">
+			<expression> <![CDATA[tier >= 0 AND tier <= 10]]> </expression>
+	</constraint>
+</table>
+
+<table name="map" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="300" y="920"/>
+	<column name="map_id" not-null="true">
+		<type name="int2" length="0"/>
+	</column>
+	<column name="map_name">
+		<type name="varchar" length="128"/>
+		<comment> <![CDATA[map file name]]> </comment>
+	</column>
+	<constraint name="map_pk" type="pk-constr" table="public.map">
+		<columns names="map_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="map_name_uni" type="uq-constr" table="public.map">
+		<columns names="map_name" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="rank_info" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<appended-sql> <![CDATA[ALTER TABLE rank_info ADD CONSTRAINT no_overlap EXCLUDE USING gist (rank WITH &&)]]> </appended-sql>
+	<position x="1300" y="980"/>
+	<column name="rank" not-null="true">
+		<type name="int4range" length="0"/>
+	</column>
+	<column name="title" not-null="true">
+		<type name="varchar" length="32"/>
+	</column>
+	<constraint name="rank_info_pk" type="pk-constr" table="public.rank_info">
+		<columns names="rank" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<function name="zone_run_increment_run_count"
+		window-func="false"
+		leakproof="true"
+		returns-setof="false"
+		behavior-type="RETURNS NULL ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		parallel-type="PARALLEL SAFE"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql"/>
+	<return-type>
+	<type name="trigger" length="0"/>
+	</return-type>
+	<definition> <![CDATA[BEGIN
+	IF NEW.class = 'soldier' THEN
+		UPDATE zone_info
+		SET soldier_run_count = soldier_run_count + 1
+		WHERE map_id = NEW.map_id
+			AND zone_type = NEW.zone_type
+			AND zone_index = NEW.zone_index;
+	ELSE 
+		UPDATE zone_info
+		SET demoman_run_count = demoman_run_count + 1
+		WHERE map_id = NEW.map_id
+			AND zone_type = NEW.zone_type
+			AND zone_index = NEW.zone_index;
+	END IF;
+	return NEW;
+END;]]> </definition>
+</function>
+
+<trigger name="on_insert" firing-type="AFTER" per-line="true" constraint="false"
+	 ins-event="true" del-event="false" upd-event="false" trunc-event="false"
+	 table="public.zone_run">
+		<function signature="public.zone_run_increment_run_count()"/>
+</trigger>
+
+<function name="zone_run_decrement_run_count"
+		window-func="false"
+		leakproof="true"
+		returns-setof="false"
+		behavior-type="RETURNS NULL ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		parallel-type="PARALLEL SAFE"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql"/>
+	<return-type>
+	<type name="trigger" length="0"/>
+	</return-type>
+	<definition> <![CDATA[BEGIN
+	IF OLD.class = 'soldier' THEN
+		UPDATE zone_info
+		SET soldier_run_count = soldier_run_count - 1
+		WHERE map_id = OLD.map_id
+			AND zone_type = OLD.zone_type
+			AND zone_index = OLD.zone_index;
+	ELSE 
+		UPDATE zone_info
+		SET demoman_run_count = demoman_run_count - 1
+		WHERE map_id = OLD.map_id
+			AND zone_type = OLD.zone_type
+			AND zone_index = OLD.zone_index;
+	END IF;
+	return OLD;
+END;]]> </definition>
+</function>
+
+<trigger name="on_delete" firing-type="AFTER" per-line="true" constraint="false"
+	 ins-event="false" del-event="true" upd-event="false" trunc-event="false"
+	 table="public.zone_run">
+		<function signature="public.zone_run_decrement_run_count()"/>
+</trigger>
+
+<table name="run_group" layers="0" collapse-mode="2" max-obj-count="2" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="800" y="0"/>
+	<column name="group" not-null="true">
+		<type name="varchar" length="2"/>
+	</column>
+	<column name="multiplier">
+		<type name="float4" length="0"/>
+	</column>
+	<constraint name="run_group_pk" type="pk-constr" table="public.run_group">
+		<columns names="group" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<function name="zone_run_rank"
+		window-func="false"
+		returns-setof="false"
+		behavior-type="CALLED ON NULL INPUT"
+		function-type="VOLATILE"
+		security-type="SECURITY INVOKER"
+		parallel-type="PARALLEL UNSAFE"
+		execution-cost="1"
+		row-amount="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<language name="plpgsql"/>
+	<return-type>
+	<type name="trigger" length="0"/>
+	</return-type>
+	<definition> <![CDATA[BEGIN
+    -- prevent recursion
+    IF current_setting('zone_run_rank.running', true) = '1' THEN
+        RETURN NEW;
+    END IF;
+
+    PERFORM set_config('zone_run_rank.running', '1', true);
+
+    -- RAISE NOTICE 'rank trigger fired after % on zone_run. map_id=% zone_type=% zone_index=% class=% player=%',
+    -- TG_OP, NEW.map_id, NEW.zone_type, NEW.zone_index, NEW.class, NEW.player_id;
+
+    IF TG_OP = 'DELETE' THEN
+        WITH sub as (SELECT player_id,
+                            RANK() OVER (
+                                PARTITION BY map_id, zone_type, zone_index, class
+                                ORDER BY duration
+                                ) AS rank
+                     FROM zone_run
+                     WHERE map_id = OLD.map_id
+                       AND zone_type = OLD.zone_type
+                       AND zone_index = OLD.zone_index
+                       AND class = OLD.class)
+        UPDATE zone_run zr
+        SET rank = sub.rank
+        FROM sub
+        WHERE zr.player_id = sub.player_id
+          AND zr.map_id = OLD.map_id
+          AND zr.zone_type = OLD.zone_type
+          AND zr.zone_index = OLD.zone_index
+          AND zr.class = OLD.class;
+
+        return OLD;
+    ELSE
+        WITH sub as (SELECT player_id,
+                            RANK() OVER (
+                                PARTITION BY map_id, zone_type, zone_index, class
+                                ORDER BY duration
+                                ) AS rank
+                     FROM zone_run
+                     WHERE map_id = NEW.map_id
+                       AND zone_type = NEW.zone_type
+                       AND zone_index = NEW.zone_index
+                       AND class = NEW.class)
+        UPDATE zone_run zr
+        SET rank = sub.rank
+        FROM sub
+        WHERE zr.player_id = sub.player_id
+          AND zr.map_id = NEW.map_id
+          AND zr.zone_type = NEW.zone_type
+          AND zr.zone_index = NEW.zone_index
+          AND zr.class = NEW.class;
+
+        PERFORM set_config('zone_run_rank.running', '0', true);
+
+        RETURN NEW;
+    END IF;
+END;]]> </definition>
+</function>
+
+<trigger name="on_modify_update_rank" firing-type="AFTER" per-line="true" constraint="false"
+	 ins-event="true" del-event="true" upd-event="true" trunc-event="false"
+	 table="public.zone_run">
+		<function signature="public.zone_run_rank()"/>
+</trigger>
+
+<constraint name="map_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.map" table="public.zone_info">
+	<columns names="map_id" ref-type="src-columns"/>
+	<columns names="map_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="soldier_tier_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.zone_tier" table="public.zone_info">
+	<columns names="soldier_tier,zone_type" ref-type="src-columns"/>
+	<columns names="tier,zone_type" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="demoman_tier_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.zone_tier" table="public.zone_info">
+	<columns names="demoman_tier,zone_type" ref-type="src-columns"/>
+	<columns names="tier,zone_type" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="soldier_rating_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.zone_rating" table="public.zone_info">
+	<columns names="soldier_rating,zone_type" ref-type="src-columns"/>
+	<columns names="rating,zone_type" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="demo_rating_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.zone_rating" table="public.zone_info">
+	<columns names="demoman_rating,zone_type" ref-type="src-columns"/>
+	<columns names="rating,zone_type" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="zone_info_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.zone_info" table="public.zone_run">
+	<columns names="map_id,zone_type,zone_index" ref-type="src-columns"/>
+	<columns names="map_id,zone_type,zone_index" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="player_id_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.player_info" table="public.zone_run">
+	<columns names="player_id" ref-type="src-columns"/>
+	<columns names="player_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="server_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.server" table="public.zone_run">
+	<columns names="server_id" ref-type="src-columns"/>
+	<columns names="server_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.country" table="public.player_info">
+	<columns names="country_code" ref-type="src-columns"/>
+	<columns names="country_code" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="author_id_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.player_info" table="public.map_author">
+	<columns names="author_id" ref-type="src-columns"/>
+	<columns names="player_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="map_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.map" table="public.map_author">
+	<columns names="map_id" ref-type="src-columns"/>
+	<columns names="map_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="tier_name_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tier_name" table="public.zone_tier">
+	<columns names="tier" ref-type="src-columns"/>
+	<columns names="tier" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="country_fk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.country" table="public.server">
+	<columns names="country_code" ref-type="src-columns"/>
+	<columns names="country_code" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_map_author_player" type="relfk" layers="0"
+	 src-table="public.map_author"
+	 dst-table="public.player_info" reference-fk="author_id_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_zone_info_soldier_zone_rating" type="relfk" layers="0"
+	 src-table="public.zone_info"
+	 dst-table="public.zone_rating" reference-fk="soldier_rating_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-17.0295" y="-41.3149"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_info_demoman_zone_rating" type="relfk" layers="0"
+	 src-table="public.zone_info"
+	 dst-table="public.zone_rating" reference-fk="demo_rating_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-7.02948" y="12.3014"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_info_zone_soldier_tier" type="relfk" layers="0"
+	 src-table="public.zone_info"
+	 dst-table="public.zone_tier" reference-fk="soldier_tier_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="8.18754" y="-120.29"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_info_zone_demoman_tier" type="relfk" layers="0"
+	 src-table="public.zone_info"
+	 dst-table="public.zone_tier" reference-fk="demoman_tier_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-21.8125" y="-67.2568"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_run_zone_info" type="relfk" layers="0"
+	 src-table="public.zone_run"
+	 dst-table="public.zone_info" reference-fk="zone_info_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="9.11723" y="8.69494"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_run_player_info" type="relfk" layers="0"
+	 src-table="public.zone_run"
+	 dst-table="public.player_info" reference-fk="player_id_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="4.03715" y="-35.253"/>
+	</label>
+</relationship>
+
+<relationship name="rel_player_info_country" type="relfk" layers="0"
+	 src-table="public.player_info"
+	 dst-table="public.country" reference-fk="country_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0.0334111" y="-34.9787"/>
+	</label>
+</relationship>
+
+<relationship name="rel_server_country" type="relfk" layers="0"
+	 src-table="public.server"
+	 dst-table="public.country" reference-fk="country_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="0.670198" y="-44.853"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_run_server" type="relfk" layers="0"
+	 src-table="public.zone_run"
+	 dst-table="public.server" reference-fk="server_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="-7.88846" y="-34.7665"/>
+	</label>
+</relationship>
+
+<relationship name="rel_map_author_map" type="relfk" layers="0"
+	 src-table="public.map_author"
+	 dst-table="public.map" reference-fk="map_fk"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_zone_info_map" type="relfk" layers="0"
+	 src-table="public.zone_info"
+	 dst-table="public.map" reference-fk="map_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="4.52083" y="-30.453"/>
+	</label>
+</relationship>
+
+<relationship name="rel_zone_tier_tier_name" type="relfk" layers="0"
+	 src-table="public.zone_tier"
+	 dst-table="public.tier_name" reference-fk="tier_name_fk"
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="12.6496" y="-41.253"/>
+	</label>
+</relationship>
+
+</dbmodel>

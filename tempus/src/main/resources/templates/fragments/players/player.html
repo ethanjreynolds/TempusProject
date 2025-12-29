@@ -1,0 +1,127 @@
+<!--/*@thymesVar id="run" type="java.util.List<com.hansenjc.tempus.data.ZoneRunWithZone>"*/-->
+<div id="player-id" th:data-player-id="${player_info.player_id}"></div>
+<div class="flex-row" style="justify-content: space-between">
+    <h1 th:text="${player_info.name}"></h1>
+
+    <div class="flex-row" style="gap: 1em; align-items: center">
+        <p th:text="${#dates.format(player_info.first_seen, 'yyyy-MM-dd')}"></p>
+        <p th:text="${#dates.format(player_info.last_seen, 'yyyy-MM-dd')}"></p>
+        <p th:utext="${player_info.country_code.getFlag()}" style="font-size: 32px"></p>
+    </div>
+</div>
+
+<div class="flex-row" style="justify-content: space-between">
+    <div class="flex-col">
+        <p id="otitle" th:text="${stats != null ? stats.overall_title : 'Unranked'}" class="title"></p>
+        <p id="orank" th:text="|Rank ${stats != null ? stats.overall_rank : '?'} Overall|"></p>
+        <p id="opts" th:text="|${stats != null ? #numbers.formatDecimal(stats.overall_points, 1, 2) : '0.00'} points|"></p>
+    </div>
+    <div class="flex-col">
+        <p id="stitle" th:text="${stats != null ? stats.soldier_title : 'Unranked'}" class="title"></p>
+        <div class="flex-row" style="gap: 0.25em">
+            <p id="srank" th:text="|Rank ${stats != null ? stats.soldier_rank : '?'} Soldier|"></p>
+            <img src="/soldier.svg" width="17px">
+        </div>
+        <p id="spts" th:text="|${stats != null ? #numbers.formatDecimal(stats.soldier_points, 1, 2) : '0.00'} points|"></p>
+    </div>
+    <div class="flex-col">
+        <p id="dtitle" th:text="${stats != null ? stats.demoman_title : 'Unranked'}" class="title"></p>
+        <div class="flex-row" style="gap: 0.25em">
+            <p id="drank" th:text="|Rank ${stats != null ? stats.demoman_rank : '?'} Demoman|"></p>
+            <img src="/demoman.svg" width="17px">
+        </div>
+        <p id="dpts" th:text="|${stats != null ? #numbers.formatDecimal(stats.demoman_points, 1, 2) : '0.00'} points|"></p>
+    </div>
+</div>
+
+<div>
+    <p>Add new Zone Run</p>
+    <div id="player-run-form-container">
+        <form id="player-run-form" class="flex-row">
+            <div class="flex-col">
+                <label for="player-run-map-id">Map<span>*</span></label>
+                <select id="player-run-map-id" name="map_id" required></select>
+            </div>
+            <div class="flex-col">
+                <label for="player-run-zone-type">Type<span>*</span></label>
+                <select id="player-run-zone-type" name="zone_type" required></select>
+            </div>
+            <div class="flex-col">
+                <label for="player-run-zone-index">Index<span>*</span></label>
+                <select id="player-run-zone-index" name="zone_index" required></select>
+            </div>
+            <div class="flex-col">
+                <p>Class<span>*</span></p>
+                <div class="flex-row" style="align-items: center; padding-right: 4px; background-color: #373232">
+                    <input type="radio" id="soldier" name="tf_class" value="soldier">
+                    <label for="soldier">Soldier</label>
+                    <input type="radio" id="demoman" name="tf_class" value="demoman">
+                    <label for="demoman">Demoman</label>
+                </div>
+            </div>
+            <div class="flex-col" style="width: 100px">
+                <label for="player-run-time">Time<span>*</span></label>
+                <input id="player-run-time" name="time" class="num" placeholder="1:30.500" required>
+            </div>
+            <div class="flex-col">
+                <label for="player-run-server">Server<span>*</span></label>
+                <select id="player-run-server" name="server_id" required></select>
+            </div>
+
+            <input type="submit" value="Submit">
+        </form>
+        <div id="player-run-form-response"></div>
+    </div>
+</div>
+
+<div>
+    <div class="flex-row" style="justify-content: space-between">
+        <h2>Runs</h2>
+        <div id="limit-counter" class="flex-row">
+            <p>Limit:&nbsp;<span id="limit" class="num">100</span></p>
+            <div class="flex-col">
+                <button id="limit-inc"><span class="material-symbols-outlined">arrow_drop_up</span></button>
+                <button id="limit-dec"><span class="material-symbols-outlined">arrow_drop_down</span></button>
+            </div>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Map</th>
+                <th>Zone</th>
+                <th style="width: 50px">Class</th>
+                <th style="width: 60px"><button id="tier">Tier<span class="material-symbols-outlined">arrow_drop_down</span></button></th>
+                <th style="width: 70px"><button id="rating">Rating<span class="material-symbols-outlined">arrow_drop_up</span></button></th>
+                <th style="width: 100px"><button id="time_submitted">Date<span class="material-symbols-outlined">arrow_drop_up</span></button></th>
+                <th><button id="duration">Time<span class="material-symbols-outlined">arrow_drop_down</span></button></th>
+                <th style="width: 100px"><button id="rank">Rank<span class="material-symbols-outlined">arrow_drop_down</span></button></th>
+                <th style="width: 100px"><button id="points">Points<span class="material-symbols-outlined">arrow_drop_up</span></button></th>
+                <th style="width: 24px"></th>
+            </tr>
+        </thead>
+        <tbody id="player-runs">
+            <tr th:each="run : ${zone_runs}">
+                <td><a th:href="|/maps/${run.zone_id.map_id}/${run.zone_id.zone_type}/${run.zone_id.zone_index}|" th:text="|${run.map_name}|"></a></td>
+                <td th:text="${run.zone_id.zone_type.toString()} == 'map' ? 'Map Run' : |${#strings.capitalize(run.zone_id.zone_type)} ${run.zone_id.zone_index}|"></td>
+                <td><img th:src="|/${run.class_}.svg|" style="display: flex; align-items: center" height="18px"></td>
+                <td class="num" th:text="|T${run.tier}|"></td>
+                <td class="num" th:text="|R${run.rating}|"></td>
+                <td class="num" th:text="|${#dates.format(run.time_submitted, 'yyyy-MM-dd')}|"></td>
+                <td class="num" th:text="${utils.formatDuration(run.duration)}"></td>
+                <td th:class="|num _${run.group}|" th:text="|${run.rank}|"></td>
+                <td class="num" th:text="|${#numbers.formatDecimal(run.points, 1, 2)}|"></td>
+                <td><button class="delete-run-btn" style="background: none; border: none;"
+                        th:data-player-id="${run.player_id}"
+                        th:data-map-id="${run.zone_id.map_id}"
+                        th:data-zone-type="${run.zone_id.zone_type}"
+                        th:data-zone-index="${run.zone_id.zone_index}"
+                        th:data-tf-class="${run.class_}">
+                        <img src="/trash.svg" width="10px">
+                    </button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/player.js"></script>

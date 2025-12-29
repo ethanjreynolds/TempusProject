@@ -1,0 +1,33 @@
+<div style="width: 100%" th:fragment="this(class, class_info, class_runs)">
+    <div class="flex-row" style="justify-content: space-between; margin-top: 6px; margin-bottom: 6px">
+        <div class="flex-row-aligned" style="gap: 0.75em">
+            <h2 th:text="${class}"></h2>
+            <img class="icon" th:src="|/${class}.svg|">
+        </div>
+        <div class="flex-row-aligned" style="gap: 0.75em">
+            <p th:text="|Tier: ${class_info.tier}|"></p>
+            <p th:text="|Rating: ${class_info.rating}|"></p>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Time</th>
+                <th>Player</th>
+                <th style="width: 100px">Date</th>
+            </tr>
+        </thead>
+        <tbody th:id="|${class}-runs|">
+            <tr th:each="run : ${class_runs}">
+                <!--/* can't start with numbers */-->
+                <td th:class="|num _${run.group}|" th:text="${run.rank}"></td>
+                <td class="num" th:text="${utils.formatDuration(run.duration)}"></td>
+                <td><a th:href="|/players/${run.player.id}|" th:text="${run.player.name}"></a></td>
+                <td class="num" th:text="${#dates.format(run.time_submitted, 'yyyy-MM-dd')}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <!--/* we need this hack because thymeleaf doesn't allow strings as javascript */-->
+    <button style="width: 100%; line-height: 24px" th:onclick="|get_zone_runs(event, this, ${zone.map_id}, ${zone.zone_index})|" th:data-zone-type="${zone.zone_type}" th:data-class="${class}">Load More</button>
+</div>

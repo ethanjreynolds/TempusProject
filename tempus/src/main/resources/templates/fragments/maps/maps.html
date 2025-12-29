@@ -1,0 +1,13 @@
+<div id="maps-grid">
+    <a th:each="map : ${maps}" th:href="|/maps/${map.id}/map/1|">
+        <div>
+            <p th:text="|${map.name}|"></p>
+            <div class="flex-row">
+                <div th:replace="~{fragments/class-info :: this('soldier', ${map.soldier_info})}"></div>
+                <div th:replace="~{fragments/class-info :: this('demoman', ${map.demoman_info})}"></div>
+            </div>
+        </div>
+        <img th:src="|/map-backgrounds/${map.name}.jpg|" loading="lazy">
+    </a>
+</div>
+<script src="/js/zone.js" defer></script>

@@ -1,0 +1,14 @@
+<div>
+    <h1 th:text="${map.name}" style="margin-bottom: 8px"></h1>
+    <div class="flex-row" style="gap: 1em">
+        <p>Authors:</p>
+        <a th:each="author : ${authors}" th:href="|/players/${author.id}|" th:text="${author.name}"></a>
+    </div>
+</div>
+
+<div class="flex-row" style="justify-content: space-between; gap: 2em">
+    <div th:replace="~{/fragments/maps/zone-class-runs.html :: this('soldier', ${info.soldier_info}, ${runs.soldier_runs})}"></div>
+    <div th:replace="~{/fragments/maps/zone-class-runs.html :: this('demoman', ${info.demoman_info}, ${runs.demoman_runs})}"></div>
+</div>
+
+<script src="/js/zone.js" defer></script>
