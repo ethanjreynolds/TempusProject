@@ -49,13 +49,13 @@ sudo pacman -S jdk21-openjdk postgresql
 ### 4. Clone the Repository
 
 ```bash
-git clone git@github.com:PSU-CMPSC431W/cmpsc431w-fa25-project-ctrl-alt-elite.git
+git clone git@github.com:ethanjreynolds/TempusProject.git
 ```
 
 ### 5. Navigate to the Web Application Directory
 
 ```bash
-cd cmpsc431w-fa25-project-ctrl-alt-elite/tempus/
+cd TempusProject/tempus/
 ```
 
 ### 6. Load the SQL Files
