@@ -1,6 +1,6 @@
-# CMPSC 431W Project
+# TEMPUS Project
 
-## Stage III: User Manual
+## User Manual
 
 **Hansen Chai, Ethan Reynolds**
 
